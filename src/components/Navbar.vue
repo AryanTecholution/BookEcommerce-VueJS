@@ -3,7 +3,9 @@
     class="z-[100] fixed h-[5rem] w-screen bg-gray-800 text-white px-4 py-3 flex items-center justify-between shadow-md"
   >
     <div class="flex items-center space-x-2">
-      <span class="text-2xl font-bold">MyShop</span>
+      <span @click="proceedToHome" class="cursor-pointer text-2xl font-bold"
+        >BookShop</span
+      >
     </div>
 
     <div class="flex w-[50%] justify-end items-center gap-8">
@@ -11,6 +13,8 @@
         <input
           type="text"
           placeholder="Search a product"
+          v-model="searchQuery"
+          @input="handleSearch"
           class="w-full px-4 py-2 rounded bg-gray-700 text-white placeholder-gray-400 focus:outline-none"
         />
       </div>
@@ -50,6 +54,7 @@
 
 <script>
 import { useCartStore } from "../stores/cart";
+import { useFilterStore } from "../stores/filter";
 import CartPopup from "./CartPopup.vue";
 
 export default {
@@ -67,10 +72,24 @@ export default {
       const cartStore = useCartStore();
       return cartStore.totalItems;
     },
+    searchQuery: {
+      get() {
+        const filterStore = useFilterStore();
+        return filterStore.searchQuery;
+      },
+      set(value) {
+        const filterStore = useFilterStore();
+        filterStore.updateSearchQuery(value);
+      },
+    },
   },
   methods: {
     toggleCartPopup() {
       this.showCartPopup = !this.showCartPopup;
+    },
+    handleSearch() {},
+    proceedToHome() {
+      this.$router.push("/");
     },
   },
 };
